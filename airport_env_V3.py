@@ -9,34 +9,13 @@ import pandas as pd
 class AirEnv(Env):
     def __init__(self):
         super(AirEnv, self).__init__() 
-        self.state_space_1=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_2=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_3=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_4=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_5=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_6=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_7=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_8=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_9=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_10=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_11=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_12=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
-        self.state_space_13 = spaces.Box(low=np.array([0,0,0,0,0,0,0,0,0,0,0,0]), high=np.array([2,2,3,3,3,3,3,3,3,3,3,3]),shape=(12,), dtype=np.int32)
-        self.observation_space = spaces.Dict({
-            'ev_1': self.state_space_1,
-            'ev_2': self.state_space_2,
-            'ev_3': self.state_space_3,
-            'ev_4': self.state_space_4,
-            'cv_1': self.state_space_5,
-            'cv_2': self.state_space_6,
-            'cv_3': self.state_space_7,
-            'cv_4': self.state_space_8,
-            'ba_1': self.state_space_9,
-            'ba_2': self.state_space_10,
-            'ba_3': self.state_space_11,
-            'ba_4': self.state_space_12,
-            'station': self.state_space_13
-        })
+        self.observation_space=spaces.Dict()
+        for i in range(1,5):
+            self.observation_space['ev_'+str(i)]=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
+            self.observation_space['cv_'+str(i)]=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
+            self.observation_space['ba_'+str(i)]=spaces.Box(low=np.array([0,-1,-2]),high=np.array([100,1,10]),shape=(3,),dtype=np.int32)
+        self.observation_space['station']=spaces.Box(low=np.array([0,0,0,0,0,0,0,0,0,0,0,0]), high=np.array([2,2,3,3,3,3,3,3,3,3,3,3]),shape=(12,), dtype=np.int32)
+        
         self.service_demand=np.zeros(12,dtype=np.int32)
         self.service_demand[2+np.random.randint(10)]=1
         self.service_demand[0],self.service_demand[1]=2,2
@@ -166,18 +145,10 @@ class AirEnv(Env):
             self.state[12][0],self.state[12][1]=2,2
         
         state=dict()
-        state['ev_1']=self.state[0]
-        state['ev_2']=self.state[1]
-        state['ev_3']=self.state[2]
-        state['ev_4']=self.state[3]
-        state['cv_1']=self.state[4]
-        state['cv_2']=self.state[5]
-        state['cv_3']=self.state[6]
-        state['cv_4']=self.state[7]
-        state['ba_1']=self.state[8]
-        state['ba_2']=self.state[9]
-        state['ba_3']=self.state[10]
-        state['ba_4']=self.state[11]
+        for i in range(0,4):
+            state['ev_'+str(i+1)]=self.state[i]
+            state['cv_'+str(i+1)]=self.state[4+i]
+            state['ba_'+str(i+1)]=self.state[8+i]
         state['station']=self.state[12]
         info=dict()
         info={'distance':dis}
@@ -196,18 +167,10 @@ class AirEnv(Env):
         self.current_vertice=np.zeros(12)
         self.next_vertice=np.zeros(12)
         state=dict()
-        state['ev_1']=self.state[0]
-        state['ev_2']=self.state[1]
-        state['ev_3']=self.state[2]
-        state['ev_4']=self.state[3]
-        state['cv_1']=self.state[4]
-        state['cv_2']=self.state[5]
-        state['cv_3']=self.state[6]
-        state['cv_4']=self.state[7]
-        state['ba_1']=self.state[8]
-        state['ba_2']=self.state[9]
-        state['ba_3']=self.state[10]
-        state['ba_4']=self.state[11]
+        for i in range(0,4):
+            state['ev_'+str(i+1)]=self.state[i]
+            state['cv_'+str(i+1)]=self.state[4+i]
+            state['ba_'+str(i+1)]=self.state[8+i]
         state['station']=self.state[12]
         info=dict()
 
